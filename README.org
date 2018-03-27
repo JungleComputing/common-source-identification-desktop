@@ -1,0 +1,59 @@
+#+title: Common Source Identification Desktop
+
+Copyright 2015-2018 Netherlands eScience Center, VU University Amsterdam, and Netherlands Forensic Institute
+
+* Introduction
+
+The Common Source Identification Desktop application finds within a set of
+images the images that were made with the same camera.  It extracts PRNU (Photo
+Response Non Uniformity) patterns from images and based on these PRNU patterns
+it correlates each image with each other image using NCC (Normalized Cross
+Correlation) or PCE (Peak to Correlation Energy).  The images are then
+clustered with a hierarchical clustering approach with averaged inter-cluster
+distances based on the similarity scores from the correlation.  This
+implementation uses CUDA to speed up the extraction and comparison.
+
+This work can be cited with: Werkhoven, B. van; Hijma, P.; Jacobs,
+C.J.H.;Maassen, J.;Geradts, Z.J.M.H.;Bal, H.E.  A Jungle Computing approach to common image
+source identification in large collections of images (under submission).
+
+* Installation
+
+To install this software CUDA >= 8.0 and a recent Java is required.  The
+software can be built and tested with:
+
+#+begin_src sh
+git clone https://github.com/JungleComputing/common-source-identification-desktop
+cd common-source-identification-desktop
+./gradlew build
+#+end_src
+
+This creates a distribution in ~build/distributions~ that can be unpacked
+anywhere and run with:
+
+#+begin_src sh
+cd common-source-identification
+./bin/common-source-identification
+#+end_src
+
+Alternatively, the following command installs the distribution in
+~build/install~. 
+
+#+begin_src sh
+./gradlew installDist
+#+end_src
+
+* Reproducing the results of the paper
+
+The results in the paper can be reproduced by downloading the [[http://forensics.inf.tu-dresden.de/ddimgdb/locations][Dresden image
+database]].  In the paper we used resolutions 4000x3000 (Pentax), 2560x1920
+(Praktica), and 3648x2736 (Olympos).  The application can be run with:
+
+#+begin_src sh
+cd build/install/common-source-identification
+./bin/common-source-identification <name-test> <path-to-dresden-dir> PCE0
+#+end_src
+
+In this command ~<name-test>~ is a user-defined name for the output files, for
+example ~reproduce~.  The ~<path-to-dresden-dir>~ should point to the directory
+that contains a set of images.

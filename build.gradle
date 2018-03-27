@@ -1,0 +1,96 @@
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
+
+    // Apply the application plugin to add support for building an application
+    id 'application'
+ 
+}
+
+// Define the main class for the application
+mainClassName = 'nl.minvenj.nfi.common_source_identification.CommonSourceIdentificationGPU'
+
+def static getOsString() {
+    String vendor = System.getProperty("java.vendor");
+    if ("The Android Project" == vendor) {
+        return "android";
+    } else {
+        String osName = System.getProperty("os.name");
+        osName = osName.toLowerCase(Locale.ENGLISH);
+        if (osName.startsWith("windows")) {
+            return "windows";
+        } else if (osName.startsWith("mac os")) {
+            return "apple";
+        } else if (osName.startsWith("linux")) {
+            return "linux";
+        } else if (osName.startsWith("sun")) {
+            return "sun"
+        }
+        return "unknown"
+    }
+}
+
+def static getArchString() {
+    String osArch = System.getProperty("os.arch");
+    osArch = osArch.toLowerCase(Locale.ENGLISH);
+    if ("i386" == osArch || "x86" == osArch || "i686" == osArch) {
+        return "x86";
+    } else if (osArch.startsWith("amd64") || osArch.startsWith("x86_64")) {
+        return "x86_64";
+    } else if (osArch.startsWith("arm64")) {
+        return "arm64";
+    } else if (osArch.startsWith("arm")) {
+        return "arm";
+    } else if ("ppc" == osArch || "powerpc" == osArch) {
+        return "ppc";
+    } else if (osArch.startsWith("ppc")) {
+        return "ppc_64";
+    } else if (osArch.startsWith("sparc")) {
+        return "sparc";
+    } else if (osArch.startsWith("mips64")) {
+        return "mips64";
+    } else if (osArch.startsWith("mips")) {
+        return "mips";
+    } else if (osArch.contains("risc")) {
+        return "risc";
+    }
+    return "unknown";
+}
+
+dependencies {
+    compile 'edu.emory.mathcs:JTransforms:2.4'
+    compile 'org.lucee:commons-io:2.4.0'
+
+    // jcuda dependencies
+    def classifier = getOsString()+'-'+getArchString()
+
+    compile (group: 'org.jcuda', name: 'jcuda', version: '0.8.0',){
+        transitive=false
+    }
+    compile (group: 'org.jcuda', name: 'jcufft', version: '0.8.0',){
+        transitive=false
+    }
+    compile group: 'org.jcuda', name: 'jcuda-natives', classifier: classifier, version: '0.8.0'
+    compile group: 'org.jcuda', name: 'jcufft-natives', classifier: classifier, version: '0.8.0'
+
+    // Use JUnit test framework
+    testCompile 'junit:junit:4.12'
+}
+
+repositories {
+    // Use jcenter for resolving your dependencies.
+    jcenter()
+}
+
+jar {
+   from('src/main/java') {
+      include '**/*.cu'
+   }
+}
+
+task copyTestResources(type: Copy) {
+    from "${projectDir}/src/main/java/nl/minvenj/nfi/common_source_identification/filtergpu"
+    include "*.cu"
+    into "${buildDir}/classes/java/main/nl/minvenj/nfi/common_source_identification/filtergpu"
+}
+processTestResources.dependsOn copyTestResources
