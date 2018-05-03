@@ -19,6 +19,8 @@ source identification in large collections of images (under submission).
 
 * Installation
 
+** Unix-like systems
+
 To install this software CUDA >= 8.0 and a recent Java is required.  The
 software can be built and tested with:
 
@@ -43,15 +45,43 @@ Alternatively, the following command installs the distribution in
 ./gradlew installDist
 #+end_src
 
+** Windows
+
+To be able to run the application on Windows, we need to install 
+the newest Java SE Development Kit, the 64 bits version.  We also need Visual
+Studio version 2013 Patch 3 or Visual Studio version 2015 but not higher.
+Finally, we need to install CUDA for Windows verion 8.
+
+Download the zip file of the [[https://github.com/JungleComputing/common-source-identification-desktop/archive/v1.0.0.zip][release]] and unpack it.  We assume that it resides
+in ~C:\common-source-identification-desktop-1.0.0~.  
+
+Then in Visual Studio, use the command prompt as described [[https://docs.microsoft.com/en-us/dotnet/framework/tools/developer-command-prompt-for-vs][here]] and move to
+directory ~C:\common-source-identification-desktop-1.0.0~.  From here we can
+execute the following commands to build:
+
+#+begin_src sh
+.\gradlew.bat build
+.\gradlew.bat installDist
+#+end_src
+
+You can find the batch files in the ~bin~ directory within the following
+directory: ~C:\common-source-identification-desktop-1.0.0\build\install\common-source-identification-desktop~.
+
 * Reproducing the results of the paper
 
 The results in the paper can be reproduced by downloading the [[http://forensics.inf.tu-dresden.de/ddimgdb/locations][Dresden image
 database]].  In the paper we used resolutions 4000x3000 (Pentax), 2560x1920
-(Praktica), and 3648x2736 (Olympos).  The application can be run with:
+(Praktica), and 3648x2736 (Olympos).  The application can be run on Linux with:
 
 #+begin_src sh
 cd build/install/common-source-identification
 ./bin/common-source-identification <name-test> <path-to-dresden-dir> PCE0
+#+end_src
+
+For Windows, the command would be:
+
+#+begin_src sh
+.\bin\common-source-identification <name-test> <path-to-dresden-dir> PCE0
 #+end_src
 
 In this command ~<name-test>~ is a user-defined name for the output files, for
