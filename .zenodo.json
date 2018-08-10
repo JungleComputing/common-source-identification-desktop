@@ -4,12 +4,12 @@
     "title": "Common Source Identification Desktop",
     "upload_type": "software",
     "creators": [{
-            "affiliation": "Vrije Universiteit Amsterdam",
-            "name": "Hijma, Pieter"
-        },
-        {
             "affiliation": "Netherlands eScience Center",
             "name": "van Werkhoven, Ben"
+        },
+	{
+            "affiliation": "Vrije Universiteit Amsterdam",
+            "name": "Hijma, Pieter"
         }
     ],
     "access_right": "open",
